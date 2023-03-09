@@ -114,14 +114,13 @@ class InterfaceGPT(QMainWindow, Ui_MainWindow):
             self.workGpt.quiti.connect(self.workGpt.deleteLater)
             self.workGpt.saida.connect(self.mostrarLabel)
             self.workGpt.saidaTextoIA.connect(self.mostrarCaixaTexto)
-            # self.btnPararThread.clicked.connect()
+
             self.threadGPT.start()
         except Exception as e:
             self.mostrarLabel(str(e))
 
-    def playAudio(self):
-        try:
-            
+    def playAudio(self)-> None:
+        try:  
             self.threadGPTAudio = QThread()
             self.workGpt = WorkerAudio()
             self.workGpt.moveToThread(self.threadGPTAudio)
