@@ -82,13 +82,12 @@ class InterfaceGPT(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         super().setupUi(self)
-        self.situacao: bool = False
-        self.btnPararAudio.setEnabled(self.situacao)
+        
+        self.btnPararAudio.setEnabled(False)
         self.btnPesquisar.clicked.connect(self.acaoBtn)
         self.btnLimparTexto.clicked.connect(self.deletarCaixaTexto)
         self.btnPlayAudio.clicked.connect(self.playAudio)
         self.btnPararAudio.clicked.connect(self.parada)
-        
     
     def mostrarLabel(self, texto: str)-> None:
         self.resposta.setText(texto)
@@ -102,8 +101,9 @@ class InterfaceGPT(QMainWindow, Ui_MainWindow):
     def deletarCaixaTexto(self)-> None:
         self.saidaText.setPlainText('')
 
-    def acaoBtn(self):
+    def acaoBtn(self)-> None:
         try:
+            self.btnPararAudio.setEnabled(False)
             self.textoUsuario = self.obterTextoUsuario()
             self.threadGPT = QThread()
             self.workGpt = WorkerGpt(self.textoUsuario)
@@ -130,19 +130,16 @@ class InterfaceGPT(QMainWindow, Ui_MainWindow):
             self.workGpt.fechar.connect(self.threadGPTAudio.deleteLater)
             self.workGpt.fechar.connect(self.workGpt.deleteLater)
             self.workGpt.fechar.connect(self.threadGPTAudio.wait)
-            # self.btnPararAudio.setEnabled(self.workGpt.parado)
-            ok = bool(self.workGpt.parado)
-            self.btnPararAudio.setEnabled(ok)
-
-            self.threadGPTAudio.start()
-
-            self.situacao = ok
+            self.workGpt.parado.connect(self.ativarBtnPararAudio)
             
+            self.threadGPTAudio.start()     
         except Exception as e:
             self.mostrarLabel(str(e))
 
+    def ativarBtnPararAudio(self, estado)-> None:
+        self.btnPararAudio.setEnabled(estado)
 
-    def parada(self):
+    def parada(self)-> None:
         self.btnPararAudio.setEnabled(False)
         self.workGpt.terminarAudio()
         self.threadGPTAudio.quit()
