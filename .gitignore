@@ -1,0 +1,5 @@
+confidencial.py
+*.mp3
+venv/
+.vscode
+__*
