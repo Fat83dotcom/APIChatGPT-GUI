@@ -13,16 +13,36 @@ from confidencial import senha
 class WorkerAudio(QObject):
     fechar = pyqtSignal()
     erro = pyqtSignal(str)
+    parado = pyqtSignal(bool)
+
+    def __init__(self, parent=None) -> None:
+        super().__init__(parent)
+        self.mutex = QMutex()
+        self.pararAudio: bool = False
+        self.parado.emit(True)
+    
+    @pyqtSlot()
+    def terminarAudio(self)-> None:
+        self.mutex.lock()
+        self.pararAudio = True
+        self.mutex.unlock()
+
+    @pyqtSlot()
     def run(self):
         try:
             pygame.init()
             pygame.mixer.init()
             pygame.mixer.music.load('audio.mp3')
             pygame.mixer.music.play()
+            while pygame.mixer.music.get_busy():
+                if self.pararAudio:
+                    pygame.mixer.music.stop()
+                    
+            self.parado.emit(False)
+            self.fechar.emit()
             
         except Exception as e:
             self.erro.emit(str(e))
-            self.fechar.emit()
             raise e
 
 class WorkerGpt(QObject):
