@@ -12,7 +12,7 @@ from confidencial import senha
 class WorkerAudio(QObject):
     fechar = pyqtSignal()
     erro = pyqtSignal(str)
-    parado = pyqtSignal(bool)
+    estadoBtn = pyqtSignal(bool)
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
@@ -28,7 +28,7 @@ class WorkerAudio(QObject):
     @pyqtSlot()
     def run(self):
         try:
-            self.parado.emit(True)
+            self.estadoBtn.emit(True)
             pygame.init()
             pygame.mixer.init()
             pygame.mixer.music.load('audio.mp3')
@@ -36,7 +36,7 @@ class WorkerAudio(QObject):
             while pygame.mixer.music.get_busy():
                 if self.pararAudio:
                     pygame.mixer.music.stop()
-            self.parado.emit(False)
+            self.estadoBtn.emit(False)
             self.fechar.emit()     
         except Exception as e:
             self.erro.emit(str(e))
@@ -129,7 +129,7 @@ class InterfaceGPT(QMainWindow, Ui_MainWindow):
             self.workGpt.fechar.connect(self.threadGPTAudio.deleteLater)
             self.workGpt.fechar.connect(self.workGpt.deleteLater)
             self.workGpt.fechar.connect(self.threadGPTAudio.wait)
-            self.workGpt.parado.connect(self.ativarBtnPararAudio)
+            self.workGpt.estadoBtn.connect(self.ativarBtnPararAudio)
             
             self.threadGPTAudio.start()     
         except Exception as e:
