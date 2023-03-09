@@ -18,7 +18,6 @@ class WorkerAudio(QObject):
         super().__init__(parent)
         self.mutex = QMutex()
         self.pararAudio: bool = False
-        self.parado.emit(True)
     
     @pyqtSlot()
     def terminarAudio(self)-> None:
@@ -29,6 +28,7 @@ class WorkerAudio(QObject):
     @pyqtSlot()
     def run(self):
         try:
+            self.parado.emit(True)
             pygame.init()
             pygame.mixer.init()
             pygame.mixer.music.load('audio.mp3')
@@ -36,10 +36,8 @@ class WorkerAudio(QObject):
             while pygame.mixer.music.get_busy():
                 if self.pararAudio:
                     pygame.mixer.music.stop()
-                    
             self.parado.emit(False)
-            self.fechar.emit()
-            
+            self.fechar.emit()     
         except Exception as e:
             self.erro.emit(str(e))
             raise e
