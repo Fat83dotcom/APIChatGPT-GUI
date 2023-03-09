@@ -5,7 +5,6 @@ import openai
 import sys
 from gtts import gTTS
 from time import sleep
-# from playsound import playsound
 import pygame
 from confidencial import senha
 
