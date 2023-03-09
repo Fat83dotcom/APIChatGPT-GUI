@@ -1,12 +1,12 @@
 from PyQt5.QtCore import QThread, QObject, pyqtSignal, QMutex, pyqtSlot
 from PyQt5.QtWidgets import QMainWindow, QApplication
+from confidencial import senha
 from ui import Ui_MainWindow
+from time import sleep
+from gtts import gTTS
+import pygame
 import openai
 import sys
-from gtts import gTTS
-from time import sleep
-import pygame
-from confidencial import senha
 
 
 class WorkerAudio(QObject):
