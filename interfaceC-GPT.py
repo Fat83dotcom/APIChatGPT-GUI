@@ -43,9 +43,9 @@ class WorkerAudio(QObject):
             raise e
 
 class WorkerGpt(QObject):
-    saida = pyqtSignal(str)
+    saidaStatus = pyqtSignal(str)
     saidaTextoIA = pyqtSignal(str)
-    quiti = pyqtSignal()
+    fechar = pyqtSignal()
 
     def __init__(self, textoUsuario, parent=None) -> None:
         super().__init__(parent)
@@ -57,7 +57,7 @@ class WorkerGpt(QObject):
             audio = 'audio.mp3'
             language = 'pt-br'
             openai.api_key = senha
-            self.saida.emit('Pesquisando ...')
+            self.saidaStatus.emit('Pesquisando ...')
             response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
                 messages=[
@@ -71,10 +71,10 @@ class WorkerGpt(QObject):
             )
             aud.save(audio)
             self.saidaTextoIA.emit(response.choices[0]['message']['content'])
-            self.saida.emit('Pronto!!!')
-            self.quiti.emit()
+            self.saidaStatus.emit('Pronto!!!')
+            self.fechar.emit()
         except Exception as e:
-            self.saida.emit(str(e))
+            self.saidaStatus.emit(str(e))
             raise e
 
 
@@ -109,10 +109,10 @@ class InterfaceGPT(QMainWindow, Ui_MainWindow):
             self.workGpt = WorkerGpt(self.textoUsuario)
             self.workGpt.moveToThread(self.threadGPT)
             self.threadGPT.started.connect(self.workGpt.run)
-            self.workGpt.quiti.connect(self.threadGPT.quit)
-            self.workGpt.quiti.connect(self.threadGPT.deleteLater)
-            self.workGpt.quiti.connect(self.workGpt.deleteLater)
-            self.workGpt.saida.connect(self.mostrarLabel)
+            self.workGpt.fechar.connect(self.threadGPT.quit)
+            self.workGpt.fechar.connect(self.threadGPT.deleteLater)
+            self.workGpt.fechar.connect(self.workGpt.deleteLater)
+            self.workGpt.saidaStatus.connect(self.mostrarLabel)
             self.workGpt.saidaTextoIA.connect(self.mostrarCaixaTexto)
 
             self.threadGPT.start()
