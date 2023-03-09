@@ -3,3 +3,5 @@ confidencial.py
 venv/
 .vscode
 __*
+build/
+*.spec
