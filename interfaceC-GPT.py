@@ -42,6 +42,7 @@ class WorkerAudio(QObject):
             self.erro.emit(str(e))
             raise e
 
+
 class WorkerGpt(QObject):
     saidaStatus = pyqtSignal(str)
     saidaTextoIA = pyqtSignal(str)
@@ -87,7 +88,7 @@ class InterfaceGPT(QMainWindow, Ui_MainWindow):
         self.btnPesquisar.clicked.connect(self.acaoBtn)
         self.btnLimparTexto.clicked.connect(self.deletarCaixaTexto)
         self.btnPlayAudio.clicked.connect(self.playAudio)
-        self.btnPararAudio.clicked.connect(self.parada)
+        self.btnPararAudio.clicked.connect(self.paradaAudio)
     
     def mostrarLabel(self, texto: str)-> None:
         self.resposta.setText(texto)
@@ -138,7 +139,7 @@ class InterfaceGPT(QMainWindow, Ui_MainWindow):
     def ativarBtnPararAudio(self, estado)-> None:
         self.btnPararAudio.setEnabled(estado)
 
-    def parada(self)-> None:
+    def paradaAudio(self)-> None:
         self.btnPararAudio.setEnabled(False)
         self.workGpt.terminarAudio()
         self.threadGPTAudio.quit()
