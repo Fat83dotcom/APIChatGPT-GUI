@@ -80,16 +80,17 @@ class WorkerGpt(QObject):
             self.saida.emit(str(e))
             raise e
 
-        
-
 
 class InterfaceGPT(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         super().setupUi(self)
+        self.situacao: bool = False
+        self.btnPararAudio.setEnabled(self.situacao)
         self.btnPesquisar.clicked.connect(self.acaoBtn)
         self.btnLimparTexto.clicked.connect(self.deletarCaixaTexto)
         self.btnPlayAudio.clicked.connect(self.playAudio)
+        self.btnPararAudio.clicked.connect(self.parada)
         
     
     def mostrarLabel(self, texto: str)-> None:
@@ -123,6 +124,7 @@ class InterfaceGPT(QMainWindow, Ui_MainWindow):
 
     def playAudio(self):
         try:
+            
             self.threadGPTAudio = QThread()
             self.workGpt = WorkerAudio()
             self.workGpt.moveToThread(self.threadGPTAudio)
@@ -131,20 +133,23 @@ class InterfaceGPT(QMainWindow, Ui_MainWindow):
             self.workGpt.fechar.connect(self.threadGPTAudio.deleteLater)
             self.workGpt.fechar.connect(self.workGpt.deleteLater)
             self.workGpt.fechar.connect(self.threadGPTAudio.wait)
+            # self.btnPararAudio.setEnabled(self.workGpt.parado)
+            ok = bool(self.workGpt.parado)
+            self.btnPararAudio.setEnabled(ok)
+
             self.threadGPTAudio.start()
 
-            self.btnPararAudio.clicked.connect(self.parada)
+            self.situacao = ok
+            
         except Exception as e:
             self.mostrarLabel(str(e))
 
+
     def parada(self):
+        self.btnPararAudio.setEnabled(False)
+        self.workGpt.terminarAudio()
         self.threadGPTAudio.quit()
-        # self.threadGPTAudio.terminate()
         self.threadGPTAudio.wait()
-        self.workGpt.deleteLater()
-        self.threadGPTAudio.deleteLater()
-        # self.workGpt.deleteLater()
-    #     # self.workGpt.fechar.connect(self.threadGPT.wait)
 
 
 if __name__ == '__main__':
