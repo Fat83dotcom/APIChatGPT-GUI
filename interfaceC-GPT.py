@@ -7,6 +7,8 @@ import openai
 import sys
 import os
 
+senhaRaw = None
+
 
 class WorkerAudio(QObject):
     fechar = pyqtSignal()
