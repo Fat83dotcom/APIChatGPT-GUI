@@ -97,11 +97,13 @@ class InterfaceGPT(QMainWindow, Ui_MainWindow):
         super().__init__(parent)
         super().setupUi(self)
 
+        self.abaPesquisa.setEnabled(False)
         self.btnPararAudio.setEnabled(False)
         self.btnPesquisar.clicked.connect(self.acaoBtn)
         self.btnLimparTexto.clicked.connect(self.deletarCaixaTexto)
         self.btnPlayAudio.clicked.connect(self.playAudio)
         self.btnPararAudio.clicked.connect(self.paradaAudio)
+        self.btnSenha.clicked.connect(self.acaoLogin)
 
     def mostrarLabel(self, texto: str) -> None:
         self.resposta.setText(texto)
