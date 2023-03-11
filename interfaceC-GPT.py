@@ -49,37 +49,46 @@ class WorkerGpt(QObject):
     saidaTextoIA = pyqtSignal(str)
     fechar = pyqtSignal()
 
-    def __init__(self, textoUsuario, senha, parent=None) -> None:
+    def __init__(self, textoUsuario, parent=None) -> None:
         super().__init__(parent)
         self.textoUsuario = textoUsuario
-        self.senha = senha
 
-    @pyqtSlot()
-    def run(self):
+    def motorGPT(self, senha):
         try:
-            diretorioAtual = os.getcwd()
-            caminho = os.path.join(diretorioAtual, 'audio.mp3')
-            language = 'pt-br'
             openai.api_key = senha
-
-            self.saidaStatus.emit('Pesquisando ...')
             response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
                 messages=[
                     {"role": "user", "content": f"{self.textoUsuario}"},
                 ]
             )
+            return response.choices[0]['message']['content']
+        except (openai.error.AuthenticationError, Exception) as e:
+            raise e
 
-            aud = gTTS(
-                text=response.choices[0]['message']['content'],
-                lang=language
-            )
-            aud.save(caminho)
-            self.saidaTextoIA.emit(response.choices[0]['message']['content'])
+    def motorGTTS(self, texto, linguagem) -> None:
+        diretorioAtual = os.getcwd()
+        caminho = os.path.join(diretorioAtual, 'audio.mp3')
+        aud = gTTS(
+            text=texto,
+            lang=linguagem
+        )
+        aud.save(caminho)
+
+    @pyqtSlot()
+    def run(self):
+        try:
+            language = 'pt-br'
+
+            self.saidaStatus.emit('Pesquisando ...')
+            response = self.motorGPT(senhaRaw)
+
+            self.motorGTTS(response, language)
+
+            self.saidaTextoIA.emit(response)
             self.saidaStatus.emit('Pronto!!!')
             self.fechar.emit()
         except Exception as e:
-            self.saidaStatus.emit(str(e))
             raise e
 
 
