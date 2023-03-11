@@ -2,11 +2,11 @@ from PyQt5.QtCore import QThread, QObject, pyqtSignal, QMutex, pyqtSlot
 from PyQt5.QtWidgets import QMainWindow, QApplication
 from confidencial import senha
 from ui import Ui_MainWindow
-from time import sleep
 from gtts import gTTS
 import pygame
 import openai
 import sys
+import os
 
 
 class WorkerAudio(QObject):
@@ -18,9 +18,9 @@ class WorkerAudio(QObject):
         super().__init__(parent)
         self.mutex = QMutex()
         self.pararAudio: bool = False
-    
+
     @pyqtSlot()
-    def terminarAudio(self)-> None:
+    def terminarAudio(self) -> None:
         self.mutex.lock()
         self.pararAudio = True
         self.mutex.unlock()
@@ -37,7 +37,7 @@ class WorkerAudio(QObject):
                 if self.pararAudio:
                     pygame.mixer.music.stop()
             self.estadoBtn.emit(False)
-            self.fechar.emit()     
+            self.fechar.emit()
         except Exception as e:
             self.erro.emit(str(e))
             raise e
@@ -48,16 +48,19 @@ class WorkerGpt(QObject):
     saidaTextoIA = pyqtSignal(str)
     fechar = pyqtSignal()
 
-    def __init__(self, textoUsuario, parent=None) -> None:
+    def __init__(self, textoUsuario, senha, parent=None) -> None:
         super().__init__(parent)
         self.textoUsuario = textoUsuario
+        self.senha = senha
 
     @pyqtSlot()
     def run(self):
         try:
-            audio = 'audio.mp3'
+            diretorioAtual = os.getcwd()
+            caminho = os.path.join(diretorioAtual, 'audio.mp3')
             language = 'pt-br'
             openai.api_key = senha
+
             self.saidaStatus.emit('Pesquisando ...')
             response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
@@ -70,7 +73,7 @@ class WorkerGpt(QObject):
                 text=response.choices[0]['message']['content'],
                 lang=language
             )
-            aud.save(audio)
+            aud.save(caminho)
             self.saidaTextoIA.emit(response.choices[0]['message']['content'])
             self.saidaStatus.emit('Pronto!!!')
             self.fechar.emit()
@@ -83,26 +86,26 @@ class InterfaceGPT(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         super().setupUi(self)
-        
+
         self.btnPararAudio.setEnabled(False)
         self.btnPesquisar.clicked.connect(self.acaoBtn)
         self.btnLimparTexto.clicked.connect(self.deletarCaixaTexto)
         self.btnPlayAudio.clicked.connect(self.playAudio)
         self.btnPararAudio.clicked.connect(self.paradaAudio)
-    
-    def mostrarLabel(self, texto: str)-> None:
+
+    def mostrarLabel(self, texto: str) -> None:
         self.resposta.setText(texto)
-    
-    def mostrarCaixaTexto(self, texto: str)-> None:
+
+    def mostrarCaixaTexto(self, texto: str) -> None:
         self.saidaText.setPlainText(texto)
 
     def obterTextoUsuario(self) -> str:
         return self.entradaUsuario.text()
-    
-    def deletarCaixaTexto(self)-> None:
+
+    def deletarCaixaTexto(self) -> None:
         self.saidaText.setPlainText('')
 
-    def acaoBtn(self)-> None:
+    def acaoBtn(self) -> None:
         try:
             self.btnPararAudio.setEnabled(False)
             self.textoUsuario = self.obterTextoUsuario()
@@ -120,8 +123,8 @@ class InterfaceGPT(QMainWindow, Ui_MainWindow):
         except Exception as e:
             self.mostrarLabel(str(e))
 
-    def playAudio(self)-> None:
-        try:  
+    def playAudio(self) -> None:
+        try:
             self.threadGPTAudio = QThread()
             self.workGpt = WorkerAudio()
             self.workGpt.moveToThread(self.threadGPTAudio)
@@ -131,15 +134,15 @@ class InterfaceGPT(QMainWindow, Ui_MainWindow):
             self.workGpt.fechar.connect(self.workGpt.deleteLater)
             self.workGpt.fechar.connect(self.threadGPTAudio.wait)
             self.workGpt.estadoBtn.connect(self.ativarBtnPararAudio)
-            
-            self.threadGPTAudio.start()     
+
+            self.threadGPTAudio.start()
         except Exception as e:
             self.mostrarLabel(str(e))
 
-    def ativarBtnPararAudio(self, estado)-> None:
+    def ativarBtnPararAudio(self, estado) -> None:
         self.btnPararAudio.setEnabled(estado)
 
-    def paradaAudio(self)-> None:
+    def paradaAudio(self) -> None:
         self.btnPararAudio.setEnabled(False)
         self.workGpt.terminarAudio()
         self.threadGPTAudio.quit()
