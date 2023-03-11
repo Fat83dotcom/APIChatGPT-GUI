@@ -117,6 +117,24 @@ class InterfaceGPT(QMainWindow, Ui_MainWindow):
     def deletarCaixaTexto(self) -> None:
         self.saidaText.setPlainText('')
 
+    def acaoLogin(self) -> None:
+        entradaSenhaUsuario = self.entradaSenha.text()
+        if entradaSenhaUsuario == '':
+            self.statusLogin.setText("O campo senha não pode estar vazio.")
+            self.entradaSenha.setFocus()
+        else:
+            global senhaRaw
+            senhaRaw = entradaSenhaUsuario
+            if senhaRaw is not None:
+                try:
+                    chat = WorkerGpt('Diga boas vindas em uma única linha')
+                    resposta = chat.motorGPT(senhaRaw)
+                    self.statusLogin.setText(f'{resposta}\nLogin efetuado.')
+                    self.abaPesquisa.setEnabled(True)
+                    self.btnSenha.setEnabled(False)
+                except (openai.error.AuthenticationError, Exception) as e:
+                    self.statusLogin.setText(f'{e}')
+
     def acaoBtn(self) -> None:
         try:
             self.btnPararAudio.setEnabled(False)
