@@ -17,10 +17,13 @@
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="1" column="0">
      <widget class="QTabWidget" name="tabWidget">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
       <property name="currentIndex">
        <number>0</number>
       </property>
-      <widget class="QWidget" name="Login">
+      <widget class="QWidget" name="abaLogin">
        <attribute name="title">
         <string>Login</string>
        </attribute>
@@ -63,7 +66,7 @@
          </layout>
         </item>
         <item>
-         <widget class="QLabel" name="label_3">
+         <widget class="QLabel" name="statusLogin">
           <property name="text">
            <string/>
           </property>
@@ -74,7 +77,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="Pesquisa">
+      <widget class="QWidget" name="abaPesquisa">
        <attribute name="title">
         <string>Pesquisa</string>
        </attribute>
