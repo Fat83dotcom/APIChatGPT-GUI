@@ -67,13 +67,16 @@ class WorkerGpt(QObject):
             raise e
 
     def motorGTTS(self, texto, linguagem) -> None:
-        diretorioAtual = os.getcwd()
-        caminho = os.path.join(diretorioAtual, 'audio.mp3')
-        aud = gTTS(
-            text=texto,
-            lang=linguagem
-        )
-        aud.save(caminho)
+        try:
+            diretorioAtual = os.getcwd()
+            caminho = os.path.join(diretorioAtual, 'audio.mp3')
+            aud = gTTS(
+                text=texto,
+                lang=linguagem
+            )
+            aud.save(caminho)
+        except Exception as e:
+            raise e
 
     @pyqtSlot()
     def run(self):
