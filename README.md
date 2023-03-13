@@ -1,6 +1,19 @@
 <<<<<<< HEAD
 # APIChatGPT-GUI
 -Interface gráfica para Chat GPT desenvolvido em Python
+
+##Empacotando o programa com Pyinstaller:
+
+- Copie o repositório com git clone
+- Crie ambiente virtual e instale os pacotes de requirements.txt
+- Ative o ambiente virtual
+- Execute o seguinte comando:
+
+`pyinstaller -F -w --hidden-import=PyQt5.QtGui --hidden-import=PyQt5.QtCore interfaceCGPT.py -n <nome_do_programa>`
+
+- Após o empacotamento, o programa estará na pasta `dist`.
+
+
 =======
 # APIChatGPT-GUI v1.2
 
