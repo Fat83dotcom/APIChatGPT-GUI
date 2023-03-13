@@ -22,6 +22,8 @@
 
 - Após o empacotamento, o programa estará na pasta `dist`.
 
+- Existem outras libs para empacotamento de scripts Python, entretanto, Pyinstaller foi o mais
+simples e eficiente que testei e usei.
 
 =======
 # APIChatGPT-GUI v1.2
