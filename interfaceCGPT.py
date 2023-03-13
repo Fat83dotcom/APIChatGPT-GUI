@@ -176,10 +176,13 @@ class InterfaceGPT(QMainWindow, Ui_MainWindow):
         self.btnPararAudio.setEnabled(estado)
 
     def paradaAudio(self) -> None:
-        self.btnPararAudio.setEnabled(False)
-        self.workGpt.terminarAudio()
-        self.threadGPTAudio.quit()
-        self.threadGPTAudio.wait()
+        try:
+            self.btnPararAudio.setEnabled(False)
+            self.workGpt.terminarAudio()
+            self.threadGPTAudio.quit()
+            self.threadGPTAudio.wait()
+        except Exception as e:
+            raise e
 
 
 if __name__ == '__main__':
