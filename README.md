@@ -27,7 +27,7 @@
 - Existem outras libs para empacotamento de scripts Python, entretanto, Pyinstaller foi o mais
 simples e eficiente que testei e usei.
 
-[- Documentação Pyinstaller](https://pyinstaller.org/en/stable/)
+[Documentação Pyinstaller](https://pyinstaller.org/en/stable/)
 
 =======
 # APIChatGPT-GUI v1.2
