@@ -15,7 +15,7 @@
     `python3 -m venv venv` (supondo que o virtualenv já esteja intalado no sistema)
 
     `source ./venv/bin/activate `
-    
+
     `pip install -r requirements.txt`
 
 - Execute o seguinte comando:
@@ -26,6 +26,8 @@
 
 - Existem outras libs para empacotamento de scripts Python, entretanto, Pyinstaller foi o mais
 simples e eficiente que testei e usei.
+
+[- Documentação Pyinstaller](https://pyinstaller.org/en/stable/)
 
 =======
 # APIChatGPT-GUI v1.2
