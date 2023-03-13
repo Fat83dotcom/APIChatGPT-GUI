@@ -107,6 +107,8 @@ class InterfaceGPT(QMainWindow, Ui_MainWindow):
         self.btnPlayAudio.clicked.connect(self.playAudio)
         self.btnPararAudio.clicked.connect(self.paradaAudio)
         self.btnSenha.clicked.connect(self.acaoLogin)
+        self.entradaUsuario.returnPressed.connect(self.acaoBtn)
+        self.entradaSenha.returnPressed.connect(self.acaoLogin)
 
     def mostrarLabel(self, texto: str) -> None:
         self.resposta.setText(texto)
