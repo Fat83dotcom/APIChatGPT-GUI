@@ -13,7 +13,9 @@
 - Crie um ambiente virtual, ative e instale os pacotes de requirements.txt:
  
     `python3 -m venv venv` (supondo que o virtualenv já esteja intalado no sistema)
+
     `source ./venv/bin/activate `
+    
     `pip install -r requirements.txt`
 
 - Execute o seguinte comando:
