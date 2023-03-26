@@ -94,11 +94,17 @@ class WorkerGpt(QObject):
             language = 'pt-br'
 
             self.saidaStatus.emit('Pesquisando ...')
+            self.estadoBtnPesquisar.emit(False)
+            self.estadoBtnLimpar.emit(False)
+            self.estadoBtnPlayAudio.emit(False)
             response = self.motorGPT(senhaRaw)
 
             self.motorGTTS(response, language)
 
             self.saidaTextoIA.emit(response)
+            self.estadoBtnPesquisar.emit(True)
+            self.estadoBtnLimpar.emit(True)
+            self.estadoBtnPlayAudio.emit(True)
             self.saidaStatus.emit('Pronto!!!')
             self.fechar.emit()
         except Exception as e:
