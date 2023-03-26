@@ -53,6 +53,9 @@ class WorkerAudio(QObject):
 class WorkerGpt(QObject):
     saidaStatus = pyqtSignal(str)
     saidaTextoIA = pyqtSignal(str)
+    estadoBtnPlayAudio = pyqtSignal(bool)
+    estadoBtnPesquisar = pyqtSignal(bool)
+    estadoBtnLimpar = pyqtSignal(bool)
     fechar = pyqtSignal()
 
     def __init__(self, textoUsuario, parent=None) -> None:
@@ -170,13 +173,16 @@ class InterfaceGPT(QMainWindow, Ui_MainWindow):
             self.workGpt = WorkerAudio()
             self.workGpt.moveToThread(self.threadGPTAudio)
             self.threadGPTAudio.started.connect(self.workGpt.run)
+
             self.workGpt.fechar.connect(self.threadGPTAudio.quit)
             self.workGpt.fechar.connect(self.threadGPTAudio.deleteLater)
             self.workGpt.fechar.connect(self.workGpt.deleteLater)
             self.workGpt.fechar.connect(self.threadGPTAudio.wait)
-            self.workGpt.estadoBtn.connect(self.ativarBtnPararAudio)
-            self.workGpt.estadoBtnPesquisar.connect(self.ativarBtnPesquisar)
-            self.workGpt.estadoBtnLimpar.connect(self.ativarBtnLimpar)
+            self.workGpt.estadoBtn.connect(self.mudarEstadoBtnPararAudio)
+            self.workGpt.estadoBtnPesquisar.connect(
+                self.mudarEstadoBtnPesquisar
+            )
+            self.workGpt.estadoBtnLimpar.connect(self.mudarEstadoBtnLimpar)
 
             self.threadGPTAudio.start()
         except Exception as e:
