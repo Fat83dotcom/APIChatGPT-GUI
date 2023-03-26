@@ -65,14 +65,15 @@ class WorkerGpt(QObject):
     def motorGPT(self, senha):
         try:
             openai.api_key = senha
-            response = openai.ChatCompletion.create(
+            resposta = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
                 messages=[
                     {"role": "user", "content": f"{self.textoUsuario}"},
                 ]
             )
-            return response.choices[0]['message']['content']
+            return resposta.choices[0]['message']['content']
         except (openai.error.AuthenticationError, Exception) as e:
+            print(e)
             raise e
 
     def motorGTTS(self, texto, linguagem) -> None:
