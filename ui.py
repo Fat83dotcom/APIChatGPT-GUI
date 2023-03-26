@@ -121,7 +121,11 @@ class Ui_MainWindow(object):
         self.btnSenha.setText(_translate("MainWindow", "Entrar"))
         self.entradaSenha.setPlaceholderText(_translate("MainWindow", "Digite sua chave OpenAI"))
         self.label_2.setText(_translate("MainWindow", "Chave API"))
+<<<<<<< HEAD
         self.label_3.setText(_translate("MainWindow", "ChatG-PT "))
+=======
+        self.label_3.setText(_translate("MainWindow", "Chat - IA"))
+>>>>>>> 3421492 (Auterações diversas na interface não especificadas)
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.abaLogin), _translate("MainWindow", "Login"))
         self.label.setText(_translate("MainWindow", "Digite sua pesquisa:"))
         self.resposta.setText(_translate("MainWindow", "<html><head/><body><p align=\"justify\"><br/></p></body></html>"))

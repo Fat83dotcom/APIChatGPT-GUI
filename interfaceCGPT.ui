@@ -73,7 +73,11 @@
              </font>
             </property>
             <property name="text">
+<<<<<<< HEAD
              <string>ChatG-PT </string>
+=======
+             <string>Chat - IA</string>
+>>>>>>> 3421492 (Auterações diversas na interface não especificadas)
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
