@@ -158,7 +158,7 @@ class InterfaceGPT(QMainWindow, Ui_MainWindow):
 
     def pesquisarAPI(self) -> None:
         try:
-            self.btnPararAudio.setEnabled(False)
+            self.mudarEstadoBtnPararAudio(False)
             self.textoUsuario = self.obterTextoUsuario()
             self.threadGPT = QThread()
             self.workGpt = WorkerGpt(self.textoUsuario)
@@ -195,18 +195,21 @@ class InterfaceGPT(QMainWindow, Ui_MainWindow):
         except Exception as e:
             self.mostrarLabel(str(e))
 
-    def ativarBtnPararAudio(self, estado) -> None:
+    def mudarEstadoBtnPlayAudio(self, estado: bool) -> None:
+        self.btnPlayAudio.setEnabled(estado)
+
+    def mudarEstadoBtnPararAudio(self, estado: bool) -> None:
         self.btnPararAudio.setEnabled(estado)
 
-    def ativarBtnPesquisar(self, estado) -> None:
+    def mudarEstadoBtnPesquisar(self, estado: bool) -> None:
         self.btnPesquisar.setEnabled(estado)
 
-    def ativarBtnLimpar(self, estado) -> None:
+    def mudarEstadoBtnLimpar(self, estado: bool) -> None:
         self.btnLimparTexto.setEnabled(estado)
 
     def paradaAudio(self) -> None:
         try:
-            self.btnPararAudio.setEnabled(False)
+            self.mudarEstadoBtnPararAudio(False)
             self.workGpt.terminarAudio()
             self.threadGPTAudio.quit()
             self.threadGPTAudio.wait()
