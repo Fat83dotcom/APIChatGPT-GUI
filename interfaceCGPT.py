@@ -118,13 +118,13 @@ class InterfaceGPT(QMainWindow, Ui_MainWindow):
 
         self.abaPesquisa.setEnabled(False)
         self.btnPararAudio.setEnabled(False)
-        self.btnPesquisar.clicked.connect(self.acaoBtn)
+        self.btnPesquisar.clicked.connect(self.pesquisarAPI)
         self.btnLimparTexto.clicked.connect(self.deletarCaixaTexto)
         self.btnPlayAudio.clicked.connect(self.playAudio)
         self.btnPararAudio.clicked.connect(self.paradaAudio)
-        self.btnSenha.clicked.connect(self.acaoLogin)
-        self.entradaUsuario.returnPressed.connect(self.acaoBtn)
-        self.entradaSenha.returnPressed.connect(self.acaoLogin)
+        self.btnLoginApi.clicked.connect(self.loginAPI)
+        self.entradaUsuario.returnPressed.connect(self.pesquisarAPI)
+        self.entradaSenha.returnPressed.connect(self.loginAPI)
 
     def mostrarLabel(self, texto: str) -> None:
         self.resposta.setText(texto)
@@ -138,7 +138,7 @@ class InterfaceGPT(QMainWindow, Ui_MainWindow):
     def deletarCaixaTexto(self) -> None:
         self.saidaText.setPlainText('')
 
-    def acaoLogin(self) -> None:
+    def loginAPI(self) -> None:
         entradaSenhaUsuario = self.entradaSenha.text()
         if entradaSenhaUsuario == '':
             self.statusLogin.setText("O campo senha não pode estar vazio.")
