@@ -34,7 +34,7 @@ simples e eficiente que testei e usei.
 - Implementaçã de uma tela de login
 - Melhoria no controle do som e melhor estabilidade geral da interface
 
-# APIChatGPT-GUI v1.2.1
+# APIChatGPT-GUI v1.2.1 (Current Version - master)
 
 - Bloqueio de alguns botões de comando enquanto certas operações são reaçizadas
 - Diminuição de bugs causados por threads executadas de forma assincrona
