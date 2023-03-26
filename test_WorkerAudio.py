@@ -23,8 +23,9 @@ class TesteWorkweAudio(unittest.TestCase):
 
     def test_signal_estadoBtn(self):
         result: list = []
-        self.wA1.estadoBtn.connect(lambda valor: result.append(valor))
-        self.wA1.estadoBtn.emit(True)
+        self.wA1.estadoBtnPararAudio.connect(
+            lambda valor: result.append(valor))
+        self.wA1.estadoBtnPararAudio.emit(True)
         self.assertEqual(result, [True])
 
     def test_attr_mutex_lock_e_unlock(self):
@@ -39,11 +40,12 @@ class TesteWorkweAudio(unittest.TestCase):
     def test_terminarAudio_muda_attr_true(self):
         self.wA1.terminarAudio()
         self.assertTrue(self.wA1.pararAudio)
-        self.wA1.estadoBtn = False
+        self.wA1.estadoBtnPararAudio = False
 
     def test_estadoBnt_continua_false_metodo_run(self):
         result: list = []
-        self.wA1.estadoBtn.connect(lambda valor: result.append(valor))
+        self.wA1.estadoBtnPararAudio.connect(
+            lambda valor: result.append(valor))
         self.wA1.run()
         self.assertEqual(result, [True, False])
 

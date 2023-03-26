@@ -13,9 +13,10 @@ senhaRaw = None
 class WorkerAudio(QObject):
     fechar = pyqtSignal()
     erro = pyqtSignal(str)
-    estadoBtn = pyqtSignal(bool)
+    estadoBtnPararAudio = pyqtSignal(bool)
     estadoBtnPesquisar = pyqtSignal(bool)
     estadoBtnLimpar = pyqtSignal(bool)
+    estadoBtnPlayAudio = pyqtSignal(bool)
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
@@ -31,9 +32,10 @@ class WorkerAudio(QObject):
     @pyqtSlot()
     def run(self):
         try:
-            self.estadoBtn.emit(True)
+            self.estadoBtnPararAudio.emit(True)
             self.estadoBtnPesquisar.emit(False)
             self.estadoBtnLimpar.emit(False)
+            self.estadoBtnPlayAudio.emit(False)
             pygame.init()
             pygame.mixer.init()
             pygame.mixer.music.load('audio.mp3')
@@ -41,9 +43,10 @@ class WorkerAudio(QObject):
             while pygame.mixer.music.get_busy():
                 if self.pararAudio:
                     pygame.mixer.music.stop()
-            self.estadoBtn.emit(False)
+            self.estadoBtnPararAudio.emit(False)
             self.estadoBtnPesquisar.emit(True)
             self.estadoBtnLimpar.emit(True)
+            self.estadoBtnPlayAudio.emit(True)
             self.fechar.emit()
         except Exception as e:
             self.erro.emit(str(e))
@@ -194,11 +197,15 @@ class InterfaceGPT(QMainWindow, Ui_MainWindow):
             self.workGpt.fechar.connect(self.workGpt.deleteLater)
             self.workGpt.fechar.connect(self.threadGPTAudio.deleteLater)
             self.workGpt.fechar.connect(self.threadGPTAudio.wait)
-            self.workGpt.estadoBtn.connect(self.mudarEstadoBtnPararAudio)
+            self.workGpt.estadoBtnPararAudio.connect(
+                self.mudarEstadoBtnPararAudio)
             self.workGpt.estadoBtnPesquisar.connect(
                 self.mudarEstadoBtnPesquisar
             )
             self.workGpt.estadoBtnLimpar.connect(self.mudarEstadoBtnLimpar)
+            self.workGpt.estadoBtnPlayAudio.connect(
+                self.mudarEstadoBtnPlayAudio
+            )
 
             self.threadGPTAudio.start()
         except Exception as e:
