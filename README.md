@@ -28,7 +28,7 @@ simples e eficiente que testei e usei.
 
 [Documentação Pyinstaller](https://pyinstaller.org/en/stable/)
 
-# APIChatGPT-GUI v1.2
+# APIChatGPT-GUI v1.2.0
 
 - Implementação de testes unitários
 - Implementaçã de uma tela de login
