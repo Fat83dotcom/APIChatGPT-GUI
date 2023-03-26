@@ -169,6 +169,13 @@ class InterfaceGPT(QMainWindow, Ui_MainWindow):
             self.workGpt.fechar.connect(self.workGpt.deleteLater)
             self.workGpt.saidaStatus.connect(self.mostrarLabel)
             self.workGpt.saidaTextoIA.connect(self.mostrarCaixaTexto)
+            self.workGpt.estadoBtnPesquisar.connect(
+                self.mudarEstadoBtnPesquisar
+            )
+            self.workGpt.estadoBtnLimpar.connect(self.mudarEstadoBtnLimpar)
+            self.workGpt.estadoBtnPlayAudio.connect(
+                self.mudarEstadoBtnPlayAudio
+            )
 
             self.threadGPT.start()
         except Exception as e:
