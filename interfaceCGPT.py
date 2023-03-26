@@ -164,9 +164,11 @@ class InterfaceGPT(QMainWindow, Ui_MainWindow):
             self.workGpt = WorkerGpt(self.textoUsuario)
             self.workGpt.moveToThread(self.threadGPT)
             self.threadGPT.started.connect(self.workGpt.run)
+
             self.workGpt.fechar.connect(self.threadGPT.quit)
-            self.workGpt.fechar.connect(self.threadGPT.deleteLater)
             self.workGpt.fechar.connect(self.workGpt.deleteLater)
+            self.workGpt.fechar.connect(self.threadGPT.deleteLater)
+            self.workGpt.fechar.connect(self.threadGPT.wait)
             self.workGpt.saidaStatus.connect(self.mostrarLabel)
             self.workGpt.saidaTextoIA.connect(self.mostrarCaixaTexto)
             self.workGpt.estadoBtnPesquisar.connect(
@@ -189,8 +191,8 @@ class InterfaceGPT(QMainWindow, Ui_MainWindow):
             self.threadGPTAudio.started.connect(self.workGpt.run)
 
             self.workGpt.fechar.connect(self.threadGPTAudio.quit)
-            self.workGpt.fechar.connect(self.threadGPTAudio.deleteLater)
             self.workGpt.fechar.connect(self.workGpt.deleteLater)
+            self.workGpt.fechar.connect(self.threadGPTAudio.deleteLater)
             self.workGpt.fechar.connect(self.threadGPTAudio.wait)
             self.workGpt.estadoBtn.connect(self.mudarEstadoBtnPararAudio)
             self.workGpt.estadoBtnPesquisar.connect(
