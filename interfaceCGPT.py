@@ -14,6 +14,8 @@ class WorkerAudio(QObject):
     fechar = pyqtSignal()
     erro = pyqtSignal(str)
     estadoBtn = pyqtSignal(bool)
+    estadoBtnPesquisar = pyqtSignal(bool)
+    estadoBtnLimpar = pyqtSignal(bool)
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
@@ -30,6 +32,8 @@ class WorkerAudio(QObject):
     def run(self):
         try:
             self.estadoBtn.emit(True)
+            self.estadoBtnPesquisar.emit(False)
+            self.estadoBtnLimpar.emit(False)
             pygame.init()
             pygame.mixer.init()
             pygame.mixer.music.load('audio.mp3')
@@ -38,6 +42,8 @@ class WorkerAudio(QObject):
                 if self.pararAudio:
                     pygame.mixer.music.stop()
             self.estadoBtn.emit(False)
+            self.estadoBtnPesquisar.emit(True)
+            self.estadoBtnLimpar.emit(True)
             self.fechar.emit()
         except Exception as e:
             self.erro.emit(str(e))
@@ -107,6 +113,8 @@ class InterfaceGPT(QMainWindow, Ui_MainWindow):
         self.btnPlayAudio.clicked.connect(self.playAudio)
         self.btnPararAudio.clicked.connect(self.paradaAudio)
         self.btnSenha.clicked.connect(self.acaoLogin)
+        self.entradaUsuario.returnPressed.connect(self.acaoBtn)
+        self.entradaSenha.returnPressed.connect(self.acaoLogin)
 
     def mostrarLabel(self, texto: str) -> None:
         self.resposta.setText(texto)
@@ -167,6 +175,8 @@ class InterfaceGPT(QMainWindow, Ui_MainWindow):
             self.workGpt.fechar.connect(self.workGpt.deleteLater)
             self.workGpt.fechar.connect(self.threadGPTAudio.wait)
             self.workGpt.estadoBtn.connect(self.ativarBtnPararAudio)
+            self.workGpt.estadoBtnPesquisar.connect(self.ativarBtnPesquisar)
+            self.workGpt.estadoBtnLimpar.connect(self.ativarBtnLimpar)
 
             self.threadGPTAudio.start()
         except Exception as e:
@@ -174,6 +184,12 @@ class InterfaceGPT(QMainWindow, Ui_MainWindow):
 
     def ativarBtnPararAudio(self, estado) -> None:
         self.btnPararAudio.setEnabled(estado)
+
+    def ativarBtnPesquisar(self, estado) -> None:
+        self.btnPesquisar.setEnabled(estado)
+
+    def ativarBtnLimpar(self, estado) -> None:
+        self.btnLimparTexto.setEnabled(estado)
 
     def paradaAudio(self) -> None:
         try:
