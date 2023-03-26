@@ -152,11 +152,11 @@ class InterfaceGPT(QMainWindow, Ui_MainWindow):
                     resposta = chat.motorGPT(senhaRaw)
                     self.statusLogin.setText(f'{resposta}\nLogin efetuado.')
                     self.abaPesquisa.setEnabled(True)
-                    self.btnSenha.setEnabled(False)
+                    self.btnLoginApi.setEnabled(False)
                 except (openai.error.AuthenticationError, Exception) as e:
                     self.statusLogin.setText(f'{e}')
 
-    def acaoBtn(self) -> None:
+    def pesquisarAPI(self) -> None:
         try:
             self.btnPararAudio.setEnabled(False)
             self.textoUsuario = self.obterTextoUsuario()
